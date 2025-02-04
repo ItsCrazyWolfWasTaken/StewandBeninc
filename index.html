@@ -5,24 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="icon" type="image/x-icon" href="Photos/android-chrome-512x512.png">
-        <title>Goofy Ahhh Dictionary</title>
+        <title>©Stew and Ben inc.®™</title>
     </head>
     <body>
-        <h1><b>Goofy ahh dictionary</b></h1>
-        <ul id="wordList"></ul>
-            <script>
-                // Load the word list dynamically
-                fetch("master.json")
-                    .then(response => response.json())
-                    .then(data => {
-                        const wordList = document.getElementById("wordList");
-                        for (let word in data) {
-                            let listItem = document.createElement("li");
-                            listItem.innerHTML = `<a href="template.html?word=${word}"><h3>${word}</h3></a>`;
-                            wordList.appendChild(listItem);
-                        }
-                    })
-                    .catch(error => console.error("Error loading words:", error));
-            </script>
+        <div id="navbar"><a href="goofydictionary.html"><h3>Dictionary</h3></a><h3>Studying</h3><h3>Games</h3></div>
     </body>
 </html>
