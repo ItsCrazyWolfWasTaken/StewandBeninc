@@ -3,6 +3,7 @@ document.body.appendChild(canvas);
 const ctx = canvas.getContext('2d');
 canvas.width = 1280;
 canvas.height = 720;
+let time = 0;
 
 type = 'game'; // State tracking ('game', 'game-over', 'game-won')
 
@@ -31,6 +32,10 @@ window.addEventListener('keyup', (e) => keys[e.key] = false);
 // Game loop
 function update() {
     if (gameOver) return;
+    time += 1;
+    if(time >= 120) {
+        player.invulnerable = false;
+    }
 
     // Player movement
     if (keys['w']) player.vy -= 0.4;
