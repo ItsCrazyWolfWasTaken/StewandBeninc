@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circle Chase Game</title>
+    <style>
+        body { text-align: center; background-color: black; }
+        canvas { background: black; display: block; margin: auto; border: 1px solid white; }
+        #gameOverScreen, #winScreen {
+            display: none;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 24px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Game Over Screen -->
+    <div id="gameOverScreen">
+        <p>Game Over!</p>
+        <button onclick="restartGame()">Play Again</button>
+    </div>
+
+    <!-- Win Screen -->
+    <div id="winScreen">
+        <p>You Won!</p>
+        <button onclick="restartGame()">Play Again</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = 1280;
+        canvas.height = 720;
+
+        const gameOverScreen = document.getElementById("gameOverScreen");
+        const winScreen = document.getElementById("winScreen");
+
+        function randomPosition() {
+            return { x: Math.random() * 1280, y: Math.random() * 720 };
+        }
+
+        let player, spawnOrb, scoreOrbs, teleportOrbs, chaseOrbs, gameOver;
+
+        function resetGame() {
+            gameOver = false;
+            gameOverScreen.style.display = "none";
+            winScreen.style.display = "none";
+
+            // Reset player in the center
+            player = { x: canvas.width / 2, y: canvas.height / 2, radius: 10, color: "cyan", vx: 0, vy: 0, speed: .75 };
+
+            // Reset spawn orb
+            spawnOrb = { ...randomPosition(), radius: 10, color: "purple" };
+
+            // Reset orbs
+            scoreOrbs = Array.from({ length: 10 }, () => ({ ...randomPosition(), radius: 10, color: "blue" }));
+            teleportOrbs = Array.from({ length: 6 }, () => ({ ...randomPosition(), radius: 10, color: "green" }));
+            chaseOrbs = Array.from({ length: 8 }, () => ({ ...randomPosition(), radius: 10, color: "red", vx: 0, vy: 0 }));
+        }
+
+        resetGame();
+
+        // Input Handling
+        let keys = {};
+        window.addEventListener("keydown", (e) => keys[e.key] = true);
+        window.addEventListener("keyup", (e) => keys[e.key] = false);
+
+        function update() {
+            if (gameOver) return;
+
+            // Player Movement
+            if (keys["w"]) player.vy -= player.speed;
+            if (keys["s"]) player.vy += player.speed;
+            if (keys["a"]) player.vx -= player.speed;
+            if (keys["d"]) player.vx += player.speed;
+
+            player.x += player.vx;
+            player.y += player.vy;
+            player.vx *= 0.90;
+            player.vy *= 0.90; // More friction for smoother movement
+
+            // Keep player inside bounds
+            if (player.x < 0) player.x = 10, player.vx *= -0.75;
+            if (player.x > canvas.width) player.x = canvas.width - 10, player.vx *= -0.75;
+            if (player.y < 0) player.y = 10, player.vy *= -0.75;
+            if (player.y > canvas.height) player.y = canvas.height - 10, player.vy *= -0.75;
+
+            // Chase Orbs Movement (Avoid Clumping)
+            chaseOrbs.forEach((orb, i) => {
+                let dx = player.x - orb.x;
+                let dy = player.y - orb.y;
+                let dist = Math.hypot(dx, dy);
+
+                if (dist > 0) {
+                    orb.vx += (dx / dist) * 0.2;  // Slower chase speed
+                    orb.vy += (dy / dist) * 0.2;
+                }
+
+                // Add repulsion force to avoid clumping
+                chaseOrbs.forEach((otherOrb, j) => {
+                    if (i !== j) {
+                        let diffX = otherOrb.x - orb.x;
+                        let diffY = otherOrb.y - orb.y;
+                        let distBetween = Math.hypot(diffX, diffY);
+                        if (distBetween < 30) {
+                            orb.vx -= (diffX / distBetween) * 0.05;
+                            orb.vy -= (diffY / distBetween) * 0.05;
+                        }
+                    }
+                });
+
+                orb.x += orb.vx;
+                orb.y += orb.vy;
+                orb.vx *= 0.95;
+                orb.vy *= 0.95;
+            });
+
+            // Check for score orb collisions
+            scoreOrbs = scoreOrbs.filter((orb) => Math.hypot(player.x - orb.x, player.y - orb.y) >= 20);
+
+            // Check if player touches teleport orbs
+            teleportOrbs.forEach((orb) => {
+                if (Math.hypot(player.x - orb.x, player.y - orb.y) < 20) {
+                    player.x = spawnOrb.x;
+                    player.y = spawnOrb.y;
+                }
+            });
+
+            // Check if player touches chase orb (Game Over)
+            chaseOrbs.forEach((orb) => {
+                if (Math.hypot(player.x - orb.x, player.y - orb.y) < 20) {
+                    gameOver = true;
+                    gameOverScreen.style.display = "block";
+                }
+            });
+
+            // Win Condition (if all score orbs are collected)
+            if (scoreOrbs.length === 0) {
+                gameOver = true;
+                winScreen.style.display = "block";
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw player
+            ctx.fillStyle = player.color;
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw spawn orb
+            ctx.fillStyle = spawnOrb.color;
+            ctx.beginPath();
+            ctx.arc(spawnOrb.x, spawnOrb.y, spawnOrb.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw score orbs
+            scoreOrbs.forEach(orb => {
+                ctx.fillStyle = orb.color;
+                ctx.beginPath();
+                ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Draw teleport orbs
+            teleportOrbs.forEach(orb => {
+                ctx.fillStyle = orb.color;
+                ctx.beginPath();
+                ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Draw chase orbs
+            chaseOrbs.forEach(orb => {
+                ctx.fillStyle = orb.color;
+                ctx.beginPath();
+                ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        function restartGame() {
+            resetGame();
+            gameLoop();
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            if (!gameOver) requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>
