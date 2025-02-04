@@ -35,10 +35,10 @@ class Player extends Orb {
     }
 
     move(keys) {
-        if (keys["ArrowUp"]) this.y -= this.speed;
-        if (keys["ArrowDown"]) this.y += this.speed;
-        if (keys["ArrowLeft"]) this.x -= this.speed;
-        if (keys["ArrowRight"]) this.x += this.speed;
+        if (keys["W"]) this.y -= this.speed;
+        if (keys["S"]) this.y += this.speed;
+        if (keys["A"]) this.x -= this.speed;
+        if (keys["D"]) this.x += this.speed;
     }
 }
 
@@ -73,6 +73,8 @@ class ChaseOrb extends Orb {
                 }
             }
         });
+        this.x += this.vx;
+        this.y += this.vy;
     }
 }
 
