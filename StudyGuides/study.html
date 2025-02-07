@@ -1,11 +1,30 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>Study Now</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Study Guides</title>
         <link rel="stylesheet" href="study.css">
         <link rel="icon" type="image/x-icon" href="../Photos/android-chrome-512x512.png">
+        <script>
+            window.isMbscDemo = true;
+        </script> 
+        <link rel="stylesheet" href="../mobiscroll.javascript.min.css">
+        <script src="../mobiscroll.javascript.min.js"></script>
+        <style type="text/css">
+                body {
+            margin: 0;
+            padding: 0;
+        }
+        body,
+        html {
+            height: 100%;
+        }
+        .demo-mobile-month-view {
+            height: 100%;
+        }
+        </style>
     </head>
     <body>
         <h1><b>Subjects</b></h1>
@@ -14,5 +33,38 @@
             <li><a href="https://knowt.com/folder/1bfd48ef-d94b-4ee4-b801-91f064e0339d"><h3>English Studying</h1></a></li>
             <li><a href="science.html"><h3>Science Studying</h1></a></li>
         </ul>
+        <div mbsc-page class="demo-mobile-month-view">
+            <div style="height:100%">
+                    <div id="demo-mobile-month-view"></div>
+            </div>
+        </div>
+        <script>
+                mobiscroll.setOptions({
+            theme: 'ios',
+            locale: mobiscroll.localeEn
+        });
+                var inst = mobiscroll.eventcalendar('#demo-mobile-month-view', {
+          locale: mobiscroll.localeEn,
+          theme: 'ios',                    // Specify theme like: theme: 'ios' or omit setting to use default
+            themeVariant: 'auto',         // More info about themeVariant: https://mobiscroll.com/docs/javascript/eventcalendar/api#opt-themeVariant
+          // drag,
+          view: {                          // More info about view: https://mobiscroll.com/docs/javascript/eventcalendar/api#opt-view
+            calendar: { type: 'month' },
+            agenda: { type: 'month' },
+          },
+          onEventClick: function (args) {  // More info about onEventClick: https://mobiscroll.com/docs/javascript/eventcalendar/api#event-onEventClick
+            mobiscroll.toast({
+              message: args.event.title,
+            });
+          },
+        });
+        mobiscroll.getJson(
+          'https://trial.mobiscroll.com/events/?vers=5',
+          function (events) {
+            inst.setEvents(events);
+          },
+          'jsonp',
+        );  
+        </script>
     </body>
 </html>
