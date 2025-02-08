@@ -23,7 +23,7 @@
                             Navbar
     ======================================================*/
   #navbar {
-    background: white;
+    background: lightslategray;
     color: rgb(13, 26, 38);
     position: fixed;
     top: 0;
@@ -324,5 +324,5 @@
   }
   
   .here{
-    background: grey;
+    background: rgb(28, 121, 184);
   }
