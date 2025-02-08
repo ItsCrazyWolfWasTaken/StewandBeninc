@@ -318,7 +318,7 @@
   
   .overlay-menu li a:hover,
   .overlay-menu li a:active {
-    color: rgb(28, 121, 184);
+    color: rgb(193, 110, 58);
     -webkit-transition: color 0.3s ease;
     transition: color 0.3s ease;
   }
