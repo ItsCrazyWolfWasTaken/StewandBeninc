@@ -55,11 +55,12 @@
             return { x: Math.random() * 1280, y: Math.random() * 720 };
         }
 
-        let player, spawnOrb, scoreOrbs, teleportOrbs, chaseOrbs, gameOver, stamina;
+        let player, spawnOrb, scoreOrbs, teleportOrbs, chaseOrbs, gameOver, stamina, staminaUsed;
 
         function resetGame() {
             gameOver = false;
             stamina = 600;
+            staminaUsed = false;
             gameOverScreen.style.display = "none";
             winScreen.style.display = "none";
 
@@ -90,8 +91,10 @@
             if (keys["s"]) player.vy += player.speed;
             if (keys["a"]) player.vx -= player.speed;
             if (keys["d"]) player.vx += player.speed;
-            if (keys[" "]) player.vx *= 1.1, player.vy *= 1.1, stamina -= 50; // Sprint
-            else player.speed = 0.5;
+            if (keys[" "] && !staminaUsed) player.vx *= 1.1, player.vy *= 1.1, stamina -= 10; // Sprint
+            if (stamina = 0) staminaUsed = true;
+            if (stamina === 600) staminaUsed = false;
+            stamina += 1;
 
             player.x += player.vx;
             player.y += player.vy;
@@ -136,6 +139,14 @@
 
             // Check for score orb collisions
             scoreOrbs = scoreOrbs.filter((orb) => Math.hypot(player.x - orb.x, player.y - orb.y) >= 20);
+            scoreOrbs.forEach((orb) => {
+                if (Math.hypot(player.x - orb.x, player.y - orb.y) < 20 && stamina <= 550) {
+                    stamina += 50;
+                }
+                else if (Math.hypot(player.x - orb.x, player.y - orb.y) < 20 && stamina > 550) {
+                    stamina = 600;
+                }
+            });
 
             // Check if player touches teleport orbs
             teleportOrbs.forEach((orb) => {
@@ -213,7 +224,7 @@
 
             // Draw stamina bar
             ctx.fillStyle = "white";
-            ctx.fillRect(10, 10, stamina, 20);
+            ctx.fillRect(340, 650, stamina, 10);
         }
 
         function restartGame() {
