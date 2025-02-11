@@ -91,7 +91,7 @@
             if (keys["s"]) player.vy += player.speed;
             if (keys["a"]) player.vx -= player.speed;
             if (keys["d"]) player.vx += player.speed;
-            if (keys[" "] && !staminaUsed) player.vx *= 1.1, player.vy *= 1.1, stamina -= 10; // Sprint
+            if (keys[" "] && !staminaUsed && stamina > 0) player.vx *= 1.1, player.vy *= 1.1, stamina -= 10; // Sprint
             if (stamina = 0) staminaUsed = true;
             if (stamina === 600) staminaUsed = false;
             stamina += 1;
