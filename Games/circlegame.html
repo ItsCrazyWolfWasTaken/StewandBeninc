@@ -55,15 +55,16 @@
             return { x: Math.random() * 1280, y: Math.random() * 720 };
         }
 
-        let player, spawnOrb, scoreOrbs, teleportOrbs, chaseOrbs, gameOver;
+        let player, spawnOrb, scoreOrbs, teleportOrbs, chaseOrbs, gameOver, stamina;
 
         function resetGame() {
             gameOver = false;
+            stamina = 600;
             gameOverScreen.style.display = "none";
             winScreen.style.display = "none";
 
             // Reset player in the center
-            player = { x: canvas.width / 2, y: canvas.height / 2, radius: 10, color: "cyan", vx: 0, vy: 0, speed: .75 };
+            player = { x: canvas.width / 2, y: canvas.height / 2, radius: 10, color: "cyan", vx: 0, vy: 0, speed: .5};
 
             // Reset spawn orb
             spawnOrb = { ...randomPosition(), radius: 10, color: "purple" };
@@ -89,6 +90,8 @@
             if (keys["s"]) player.vy += player.speed;
             if (keys["a"]) player.vx -= player.speed;
             if (keys["d"]) player.vx += player.speed;
+            if (keys[" "]) player.vx *= 1.1, player.vy *= 1.1, stamina -= 50; // Sprint
+            else player.speed = 0.5;
 
             player.x += player.vx;
             player.y += player.vy;
@@ -207,6 +210,10 @@
                 ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
                 ctx.fill();
             });
+
+            // Draw stamina bar
+            ctx.fillStyle = "white";
+            ctx.fillRect(10, 10, stamina, 20);
         }
 
         function restartGame() {
