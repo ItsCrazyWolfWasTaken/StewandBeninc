@@ -62,6 +62,7 @@
             stamina = 600;
             staminaUsed = false;
             invulnerable = true;
+            timer = 0;
             gameOverScreen.style.display = "none";
             winScreen.style.display = "none";
 
@@ -98,7 +99,7 @@
             if (stamina < 600) stamina += 1;
 
             timer += 1;
-            if (timer === 120) invulnerable = false;
+            if (timer >= 120) invulnerable = false;
 
             player.x += player.vx;
             player.y += player.vy;
@@ -118,8 +119,8 @@
                 let dist = Math.hypot(dx, dy);
 
                 if (dist > 0) {
-                    orb.vx += (dx / dist) * 0.2;  // Slower chase speed
-                    orb.vy += (dy / dist) * 0.2;
+                    orb.vx += (dx / dist) * 0.3;  // Slower chase speed
+                    orb.vy += (dy / dist) * 0.3;
                 }
 
                 // Add repulsion force to avoid clumping
@@ -129,8 +130,8 @@
                         let diffY = otherOrb.y - orb.y;
                         let distBetween = Math.hypot(diffX, diffY);
                         if (distBetween < 30) {
-                            orb.vx -= (diffX / distBetween) * 0.05;
-                            orb.vy -= (diffY / distBetween) * 0.05;
+                            orb.vx -= (diffX / distBetween) * 0.1;
+                            orb.vy -= (diffY / distBetween) * 0.1;
                         }
                     }
                 });
@@ -186,6 +187,10 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            // Draw stamina bar
+            ctx.fillStyle = "white";
+            ctx.fillRect(340, 650, stamina, 10);
+
             // Draw player
             ctx.fillStyle = player.color;
             ctx.beginPath();
@@ -221,10 +226,6 @@
                 ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
                 ctx.fill();
             });
-
-            // Draw stamina bar
-            ctx.fillStyle = "white";
-            ctx.fillRect(340, 650, stamina, 10);
         }
 
         function restartGame() {
