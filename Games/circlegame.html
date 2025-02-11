@@ -141,6 +141,18 @@
                     player.y = spawnOrb.y;
                 }
             });
+            teleportOrbs.forEach((orb) => {
+                chaseOrbs.forEach((chaseOrb) => {
+                    if (Math.hypot(orb.x - chaseOrb.x, orb.y - chaseOrb.y) < 20) {
+                        chaseOrb.x = spawnOrb.x;
+                        chaseOrb.y = spawnOrb.y;
+                    }
+                });
+                if (Math.hypot(player.x - orb.x, player.y - orb.y) < 20) {
+                    player.x = spawnOrb.x;
+                    player.y = spawnOrb.y;
+                }
+            });
 
             // Check if player touches chase orb (Game Over)
             chaseOrbs.forEach((orb) => {
