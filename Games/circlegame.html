@@ -129,7 +129,7 @@
                         let diffX = otherOrb.x - orb.x;
                         let diffY = otherOrb.y - orb.y;
                         let distBetween = Math.hypot(diffX, diffY);
-                        if (distBetween < 30) {
+                        if (distBetween < 75) {
                             orb.vx -= (diffX / distBetween) * 0.3;
                             orb.vy -= (diffY / distBetween) * 0.3;
                         }
