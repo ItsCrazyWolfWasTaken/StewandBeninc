@@ -143,11 +143,14 @@
                         }
                     }
                 });
-
                 orb.x += orb.vx;
                 orb.y += orb.vy;
                 orb.vx *= 0.95;
                 orb.vy *= 0.95;
+                if(orb.vx > 6.5) orb.vx = 6.5;
+                if(orb.vy > 6.5) orb.vy = 6.5;
+                if(orb.vx < -6.5) orb.vx = -6.5;
+                if(orb.vy < -6.5) orb.vy = -6.5;
             });
 
             // Check for score orb collisions
