@@ -11,7 +11,7 @@ body {
 .header {
     text-align: center;
     padding: 20px;
-    background-color: #2e7d32;
+    background-color: #3b5998;
     color: white;
     border-radius: 8px;
     margin-bottom: 20px;
@@ -39,21 +39,20 @@ body {
 }
 
 .dropdown:hover {
-    background-color: #c8e6c9;
+    background-color: #e8e8e8;
 }
 
 .dropdown-toggle {
     margin: 0;
     font-size: 20px;
     font-weight: bold;
-    color: #2e7d32;
 }
 
 /* Dropdown Content */
 .dropdown-content {
     display: none;
     padding: 15px;
-    border-top: 2px solid #2e7d32;
+    border-top: 2px solid #ccc;
     background-color: #f9f9f9;
     border-radius: 0 0 8px 8px;
 }
@@ -72,7 +71,7 @@ ul {
 li {
     margin: 8px 0;
     padding: 5px;
-    border-left: 4px solid #2e7d32;
+    border-left: 4px solid #3b5998;
     background-color: #f1f1f1;
     padding-left: 10px;
     border-radius: 4px;
@@ -80,7 +79,7 @@ li {
 
 /* Section Titles */
 h2 {
-    color: #2e7d32;
+    color: #3b5998;
     margin-bottom: 10px;
 }
 
