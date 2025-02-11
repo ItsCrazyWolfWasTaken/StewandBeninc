@@ -87,14 +87,14 @@
             if (gameOver) return;
 
             // Player Movement
-            if (keys["w"]) player.vy -= player.speed;
-            if (keys["s"]) player.vy += player.speed;
-            if (keys["a"]) player.vx -= player.speed;
-            if (keys["d"]) player.vx += player.speed;
-            if (keys[" "] && !staminaUsed && stamina > 0) player.vx *= 1.1, player.vy *= 1.1, stamina -= 10; // Sprint
+            if (keys["w"] && player.vy >= -10) player.vy -= player.speed;
+            if (keys["s"] && player.vy <= 10) player.vy += player.speed;
+            if (keys["a"] && player.vx >= -10) player.vx -= player.speed;
+            if (keys["d"] && player.vx <= 10) player.vx += player.speed;
+            if (keys[" "] && !staminaUsed && stamina > 0) player.vx *= 1.5, player.vy *= 1.5, stamina -= 10; // Sprint
             if (stamina === 0) staminaUsed = true;
             if (stamina === 600) staminaUsed = false;
-            stamina += 1;
+            if (stamina < 600) stamina += 1;
 
             player.x += player.vx;
             player.y += player.vy;
