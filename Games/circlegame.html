@@ -55,12 +55,13 @@
             return { x: Math.random() * 1280, y: Math.random() * 720 };
         }
 
-        let player, spawnOrb, scoreOrbs, teleportOrbs, chaseOrbs, gameOver, stamina, staminaUsed;
+        let player, spawnOrb, scoreOrbs, teleportOrbs, chaseOrbs, gameOver, stamina, staminaUsed, invulnerable, timer;
 
         function resetGame() {
             gameOver = false;
             stamina = 600;
             staminaUsed = false;
+            invulnerable = true;
             gameOverScreen.style.display = "none";
             winScreen.style.display = "none";
 
@@ -87,14 +88,17 @@
             if (gameOver) return;
 
             // Player Movement
-            if (keys["w"] && player.vy >= -10) player.vy -= player.speed;
-            if (keys["s"] && player.vy <= 10) player.vy += player.speed;
-            if (keys["a"] && player.vx >= -10) player.vx -= player.speed;
-            if (keys["d"] && player.vx <= 10) player.vx += player.speed;
-            if (keys[" "] && !staminaUsed && stamina > 0) player.vx *= 1.5, player.vy *= 1.5, stamina -= 10; // Sprint
+            if (keys["w"] && player.vy >= -5) player.vy -= player.speed;
+            if (keys["s"] && player.vy <= 5) player.vy += player.speed;
+            if (keys["a"] && player.vx >= -5) player.vx -= player.speed;
+            if (keys["d"] && player.vx <= 5) player.vx += player.speed;
+            if (keys[" "] && !staminaUsed && stamina > 0) player.vx *= 1.15, player.vy *= 1.15, stamina -= 10; // Sprint
             if (stamina === 0) staminaUsed = true;
             if (stamina === 600) staminaUsed = false;
             if (stamina < 600) stamina += 1;
+
+            timer += 1;
+            if (timer === 120) invulnerable = false;
 
             player.x += player.vx;
             player.y += player.vy;
@@ -162,15 +166,11 @@
                         chaseOrb.y = spawnOrb.y;
                     }
                 });
-                if (Math.hypot(player.x - orb.x, player.y - orb.y) < 20) {
-                    player.x = spawnOrb.x;
-                    player.y = spawnOrb.y;
-                }
             });
 
             // Check if player touches chase orb (Game Over)
             chaseOrbs.forEach((orb) => {
-                if (Math.hypot(player.x - orb.x, player.y - orb.y) < 20) {
+                if (Math.hypot(player.x - orb.x, player.y - orb.y) < 20 && !invulnerable) {
                     gameOver = true;
                     gameOverScreen.style.display = "block";
                 }
