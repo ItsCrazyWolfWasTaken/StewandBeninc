@@ -112,6 +112,14 @@
             if (player.y < 0) player.y = 10, player.vy *= -0.75;
             if (player.y > canvas.height) player.y = canvas.height - 10, player.vy *= -0.75;
 
+            // Keep Chase orbs inside bounds
+            chaseOrbs.forEach((orb) =>{
+                if (orb.x < 0) orb.x = 10, orb.vx *= -0.75;
+                if (orb.x > canvas.width) orb.x = canvas.width - 10, orb.vx *= -0.75;
+                if (orb.y < 0) orb.y = 10, orb.vy *= -0.75;
+                if (orb.y > canvas.height) orb.y = canvas.height - 10, orb.vy *= -0.75;
+            })
+
             // Chase Orbs Movement (Avoid Clumping)
             chaseOrbs.forEach((orb, i) => {
                 let dx = player.x - orb.x;
