@@ -7,6 +7,10 @@ body {
     line-height: 1.6;
 }
 
+p {
+    color: rgb(50, 50, 50);
+}
+
 /* Centered Page Title */
 .header {
     text-align: center;
