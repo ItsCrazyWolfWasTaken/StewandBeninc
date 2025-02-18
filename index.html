@@ -8,6 +8,18 @@
         <link rel="stylesheet" href="style.css">
         <script src="navbar.js"></script>
         <title>©Stew and Ben inc.®™</title>
+        <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+        <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth'
+            });
+            calendar.render();
+        });
+
+        </script>
     </head>
     <body>
         <!-- <div id="navbar"><a href="goofydictionary.html"><h3>Dictionary</h3></a><a href="StudyGuides/study.html"><h3>Studying</h3></a><h3>Games</h3></div> -->
@@ -23,7 +35,7 @@
             <!-- Navbar Links -->
             <ul id="menu">
                 <li><a href="dictionary.html">Dictionary</a></li>
-                <li><div class="top-menu"><a href="../StudyGuides/study.html">Studying</a>
+                <li><div class="top-menu">>Studying
                     <div class="top-menu-content">
                       <a href="StudyGuides/Government/government.html">Government</a>
                       <a href="https://knowt.com/folder/1bfd48ef-d94b-4ee4-b801-91f064e0339d">English</a>
@@ -45,9 +57,10 @@
         <div class="overlay-menu">
         <ul id="menu">
             <li><a href="dictionary.html">Dictionary</a></li>
-            <li><a href="StudyGuides/study.html">Studying</a></li>
+            <li>Studying</li>
             <li><a href="Games/games.html">If you know, you know</a></li>
             </ul>
         </div>
+        <div style="margin-top: 75px;" id="calendar"></div>
     </body>
 </html>
