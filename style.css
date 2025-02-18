@@ -350,3 +350,8 @@
   }
   
   .top-menu:hover .top-menu-content {display: block;}
+
+  #calendar {
+    height: 675px;
+    padding-top: 75;
+  }
