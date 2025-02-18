@@ -2,7 +2,7 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    background-color: rgb(10, 10, 10);
+    background-color: rgb(50, 50, 50);
     color: #333;
     line-height: 1.6;
 }
@@ -12,7 +12,7 @@ body {
     text-align: center;
     padding: 20px;
     background-color: #2e7d32;
-    color: rgb(10, 10, 10);
+    color: rgb(50, 50, 50);
     border-radius: 8px;
     margin-bottom: 20px;
 }
@@ -53,7 +53,7 @@ body {
 .dropdown-content {
     display: none;
     padding: 15px;
-    border-top: 2px solid #2e7d32;
+    border-top: 2px solid #ccc;
     background-color: #f9f9f9;
     border-radius: 0 0 8px 8px;
 }
@@ -76,7 +76,7 @@ ul.dropdown li {
     background-color: #f1f1f1;
     padding-left: 10px;
     border-radius: 4px;
-    color: rgb(10, 10, 10);
+    color: rgb(50, 50, 50);
 }
 
 /* Section Titles */
