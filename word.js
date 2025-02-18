@@ -18,7 +18,7 @@ fetch("master.json")
             document.getElementById("pos").textContent = `(${pos})`;
             document.getElementById("definition").textContent = `${def}`;
             document.getElementById("sentence").textContent = `${sentence}`;
-            document.getElementById("title").textContent = `Goofy Ahhh Dictionary | ${word}`;
+            document.getElementById("title").textContent = `©Stew and Ben inc.®™ | Dictionary | ${word}`;
 
             // Dynamically set image
             let img = document.getElementById("wordImage");
