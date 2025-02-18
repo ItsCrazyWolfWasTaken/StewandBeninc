@@ -14,9 +14,19 @@
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth'
-            });
-            calendar.render();
+                initialView: 'dayGridMonth',
+                events: [
+                {
+                    title: 'Mandarin Dictation Quiz',
+                    start: '2025-02-18'
+                },
+                {
+                    title: 'Capstone Rough Draft Due',
+                    start: '2025-02-21'
+                }
+                ]
+        });
+        calendar.render();
         });
 
         </script>
