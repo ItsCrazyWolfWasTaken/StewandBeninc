@@ -326,14 +326,6 @@
   .here{
     background: #BBCCDD;
   }
-
-  body{
-    background: #0a0a23;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-  }
   
   .top-menu {
     display: inline-block;
