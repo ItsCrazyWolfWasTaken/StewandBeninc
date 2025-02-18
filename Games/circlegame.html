@@ -83,13 +83,13 @@
         const ctx = canvas.getContext("2d");
 
         canvas.width = 1280;
-        canvas.height = 720;
+        canvas.height = 680;
 
         const gameOverScreen = document.getElementById("gameOverScreen");
         const winScreen = document.getElementById("winScreen");
 
         function randomPosition() {
-            return { x: Math.random() * 1280, y: Math.random() * 720 };
+            return { x: Math.random() * 1280, y: Math.random() * 680 };
         }
 
         let player, spawnOrb, scoreOrbs, teleportOrbs, chaseOrbs, gameOver, stamina, staminaUsed, invulnerable, timer;
