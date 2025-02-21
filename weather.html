@@ -51,53 +51,102 @@
             <li><a href="Games/games.html">If you know, you know</a></li>
             </ul>
         </div>
-        <input type="text" id="address" placeholder="Enter an address" style="margin-top: 75px;">
-    <button onclick="geocodeAddress()">Get Forecast</button>
-    <div id="forecast"></div>
-
-    <script>
-        async function geocodeAddress() {
-            const address = document.getElementById('address').value;
-            const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
-            
-            try {
-                let response = await fetch(geocodeUrl);
-                let data = await response.json();
-                
-                if (data.length > 0) {
-                    const location = data[0];
-                    getWeather(location.lat, location.lon);
-                } else {
-                    document.getElementById('forecast').innerText = 'Failed to geocode address.';
+        <style>
+            #suggestions {
+                border: 1px solid #ccc;
+                max-height: 150px;
+                overflow-y: auto;
+                position: absolute;
+                background: white;
+                width: 200px;
+            }
+            .suggestion {
+                padding: 5px;
+                cursor: pointer;
+            }
+            .suggestion:hover {
+                background: #eee;
+            }
+        </style>
+    </head>
+    <body>
+        <input type="text" id="address" placeholder="Enter an address" oninput="showSuggestions()" style="margin-top: 75px;">
+        <div id="suggestions"></div>
+        <button onclick="geocodeAddress()">Get Forecast</button>
+        <div id="forecast"></div>
+    
+        <script>
+            async function showSuggestions() {
+                const address = document.getElementById('address').value;
+                if (address.length < 3) { 
+                    document.getElementById('suggestions').innerHTML = '';
+                    return;
                 }
-            } catch (error) {
-                console.error('Error fetching geocode data:', error);
-                document.getElementById('forecast').innerText = 'Failed to fetch geocode data.';
+                const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=5`;
+                
+                try {
+                    let response = await fetch(geocodeUrl);
+                    let data = await response.json();
+                    
+                    let suggestionsDiv = document.getElementById('suggestions');
+                    suggestionsDiv.innerHTML = '';
+                    data.forEach(location => {
+                        let div = document.createElement('div');
+                        div.className = 'suggestion';
+                        div.innerText = location.display_name;
+                        div.onclick = () => {
+                            document.getElementById('address').value = location.display_name;
+                            suggestionsDiv.innerHTML = '';
+                        };
+                        suggestionsDiv.appendChild(div);
+                    });
+                } catch (error) {
+                    console.error('Error fetching suggestions:', error);
+                }
             }
-        }
-
-        async function getWeather(lat, lon) {
-            try {
-                const apiUrl = `https://api.weather.gov/points/${lat},${lon}`;
+    
+            async function geocodeAddress() {
+                const address = document.getElementById('address').value;
+                const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
                 
-                let response = await fetch(apiUrl);
-                let data = await response.json();
-                let forecastUrl = data.properties.forecast;
-                
-                response = await fetch(forecastUrl);
-                data = await response.json();
-                
-                const forecastDiv = document.getElementById('forecast');
-                forecastDiv.innerHTML = data.properties.periods.map(period => `
-                    <h3>${period.name}</h3>
-                    <p>${period.detailedForecast}</p>
-                `).join('');
-            } catch (error) {
-                console.error('Error fetching weather data:', error);
-                document.getElementById('forecast').innerText = 'Failed to fetch weather data.';
+                try {
+                    let response = await fetch(geocodeUrl);
+                    let data = await response.json();
+                    
+                    if (data.length > 0) {
+                        const location = data[0];
+                        getWeather(location.lat, location.lon);
+                    } else {
+                        document.getElementById('forecast').innerText = 'Failed to geocode address.';
+                    }
+                } catch (error) {
+                    console.error('Error fetching geocode data:', error);
+                    document.getElementById('forecast').innerText = 'Failed to fetch geocode data.';
+                }
             }
-        }
-    </script>
+    
+            async function getWeather(lat, lon) {
+                try {
+                    const apiUrl = `https://api.weather.gov/points/${lat},${lon}`;
+                    
+                    let response = await fetch(apiUrl);
+                    let data = await response.json();
+                    let forecastUrl = data.properties.forecast;
+                    
+                    response = await fetch(forecastUrl);
+                    data = await response.json();
+                    
+                    const forecastDiv = document.getElementById('forecast');
+                    forecastDiv.innerHTML = data.properties.periods.map(period => `
+                        <h3>${period.name}</h3>
+                        <p>${period.detailedForecast}</p>
+                    `).join('');
+                } catch (error) {
+                    console.error('Error fetching weather data:', error);
+                    document.getElementById('forecast').innerText = 'Failed to fetch weather data.';
+                }
+            }
+        </script>
     
 </body>
 </html>
