@@ -6,7 +6,44 @@
     <title>©Stew and Ben inc.®™ | NOAA Weather Forecast</title>
 </head>
 <body>
-    <h1>NOAA Weather Forecast</h1>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <nav id="navbar" class="">
+        <div class="nav-wrapper">
+            <!-- Navbar Logo -->
+            <div class="logo">
+            <!-- Logo Placeholder for Inlustration -->
+            <a href="index.html"><i class="fa"></i><img src="logo.png" height="50px"></a>
+            </div>
+
+            <!-- Navbar Links -->
+            <ul id="menu">
+                <li><a href="dictionary.html">Dictionary</a></li>
+                <li><div class="top-menu"><a>Studying</a>
+                    <div class="top-menu-content">
+                      <a href="StudyGuides/Government/government.html">Government</a>
+                      <a href="https://knowt.com/folder/1bfd48ef-d94b-4ee4-b801-91f064e0339d">English</a>
+                      <a href="StudyGuides/Science/science.html">Science</a>
+                    </div></li>
+                <li><a href="Games/games.html">If you know, you know</a></li>
+            </ul>
+        </div>
+        </nav>
+
+
+        <!-- Menu Icon -->
+        <div class="menuIcon">
+        <span class="icon icon-bars"></span>
+        <span class="icon icon-bars overlay"></span>
+        </div>
+
+
+        <div class="overlay-menu">
+        <ul id="menu">
+            <li><a href="dictionary.html">Dictionary</a></li>
+            <li><a>Studying</a></li>
+            <li><a href="Games/games.html">If you know, you know</a></li>
+            </ul>
+        </div>
     <button onclick="getWeather()">Get Forecast</button>
     <div id="forecast"></div>
 
@@ -14,8 +51,8 @@
         async function getWeather() {
             try {
                 // NOAA API: Replace with your desired coordinates
-                const lat = 39.7456;
-                const lon = -97.0892;
+                const lat = 41.118863;
+                const lon = -73.315069;
                 const apiUrl = `https://api.weather.gov/points/${lat},${lon}`;
                 
                 // Fetch the gridpoint URL
@@ -39,5 +76,6 @@
             }
         }
     </script>
+    
 </body>
 </html>
