@@ -50,7 +50,7 @@ p {
     margin: 0;
     font-size: 20px;
     font-weight: bold;
-    color: orange;
+    color: rgb(255, 136, 0);
 }
 
 /* Dropdown Content */
@@ -76,7 +76,7 @@ ul {
 ul.dropdown li {
     margin: 8px 0;
     padding: 5px;
-    border-left: 4px solid orange;
+    border-left: 4px solid rgb(255, 136, 0);
     background-color: #f1f1f1;
     padding-left: 10px;
     border-radius: 4px;
@@ -85,7 +85,7 @@ ul.dropdown li {
 
 /* Section Titles */
 h2 {
-    color: orange;
+    color: rgb(255, 136, 0);
     margin-bottom: 10px;
 }
 
