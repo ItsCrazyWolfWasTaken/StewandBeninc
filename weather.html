@@ -14,9 +14,14 @@
 </head>
 <body>
     <script src="navbar.js"></script>
-    </head>
-    <body>
-        <input type="text" id="address" placeholder="Enter an address" oninput="showSuggestions()" style="margin-top: 75px;">
+    <div class="overlay-menu">
+        <ul id="menu">
+            <li><a href="dictionary.html">Dictionary</a></li>
+            <li><span><a>Studying</a></span></li>
+            <li><a href="weather.html" class="here">Weather</a></li>
+            </ul>
+          </div>
+        <input type="text" id="address" placeholder="Enter an address" oninput="showSuggestions()" class="top">
         <div id="suggestions"></div>
         <button onclick="geocodeAddress()">Get Forecast</button>
         <div id="forecast"></div>
