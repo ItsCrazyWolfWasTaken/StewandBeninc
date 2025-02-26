@@ -31,12 +31,12 @@
             async function geocodeAddress() {
                 const address = document.getElementById('address').value;
                 address.replace(/ /g, '+');
+                console.log('Geocoding address in this form:', address);
                 const geocodeUrl = `https://geocode.maps.co/search?q=${address}&api_key=${apiKey}`;
                 
                 try {
                     let response = await fetch(geocodeUrl);
                     let data = await response.json();
-                    
                     if (data.length > 0) {
                         const location = data[0];
                         getWeather(location.lat, location.lon);
