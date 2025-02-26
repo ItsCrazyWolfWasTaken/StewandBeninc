@@ -27,38 +27,10 @@
         <div id="forecast"></div>
     
         <script>
-            async function showSuggestions() {
-                const address = document.getElementById('address').value;
-                if (address.length < 3) { 
-                    document.getElementById('suggestions').innerHTML = '';
-                    return;
-                }
-                const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=5`;
-                
-                try {
-                    let response = await fetch(geocodeUrl);
-                    let data = await response.json();
-                    
-                    let suggestionsDiv = document.getElementById('suggestions');
-                    suggestionsDiv.innerHTML = '';
-                    data.forEach(location => {
-                        let div = document.createElement('div');
-                        div.className = 'suggestion';
-                        div.innerText = location.display_name;
-                        div.onclick = () => {
-                            document.getElementById('address').value = location.display_name;
-                            suggestionsDiv.innerHTML = '';
-                        };
-                        suggestionsDiv.appendChild(div);
-                    });
-                } catch (error) {
-                    console.error('Error fetching suggestions:', error);
-                }
-            }
-    
+            let apiKey = "67bf3edf17f5e509048619idn4a1a8";
             async function geocodeAddress() {
                 const address = document.getElementById('address').value;
-                const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+                const geocodeUrl = `https://geocode.maps.co/search?q=${address}&api_key=${apiKey}`;
                 
                 try {
                     let response = await fetch(geocodeUrl);
