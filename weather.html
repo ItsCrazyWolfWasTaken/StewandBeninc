@@ -30,6 +30,7 @@
             let apiKey = "67bf3edf17f5e509048619idn4a1a8";
             async function geocodeAddress() {
                 const address = document.getElementById('address').value;
+                address.replace(' ', '+');
                 const geocodeUrl = `https://geocode.maps.co/search?q=${address}&api_key=${apiKey}`;
                 
                 try {
