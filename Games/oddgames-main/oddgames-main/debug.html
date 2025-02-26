@@ -1,0 +1,13 @@
+hi
+<script>
+    setTimeout(function(){//alert('hi')
+url="https://google.com"
+var newWin = window.open(url);
+//alert(newWin)
+if(!newWin || newWin.closed || typeof newWin.closed=='undefined') 
+{ 
+    //POPUP BLOCKED
+    alert("blocked")
+}
+}, 1000);
+</script>
