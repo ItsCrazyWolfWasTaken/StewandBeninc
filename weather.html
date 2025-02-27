@@ -26,6 +26,26 @@
         <div id="forecast"></div>
     
         <script>
+            async function getWeather(lat, lon) {
+                try {
+                    const apiUrl = `https://api.weather.gov/points/${lat},${lon}`;
+                    let response = await fetch(apiUrl);
+                    let data = await response.json();
+                    let forecastUrl = data.properties.forecastHourly;
+                    
+                    response = await fetch(forecastUrl);
+                    data = await response.json();
+                    
+                    const forecastDiv = document.getElementById('forecast');
+                    forecastDiv.innerHTML = data.properties.periods.map(period => `
+                        <h3>${period.name}</h3>
+                        <p>${period.detailedForecast}</p>
+                    `).join('');
+                } catch (error) {
+                    console.error('Error fetching weather data:', error);
+                    document.getElementById('forecast').innerText = 'Failed to fetch weather data.';
+                }
+            }
             function handleResponse(data) {
                 console.log("Geocoding data:", data);
 
@@ -49,26 +69,6 @@
                 document.body.appendChild(script);
             }
             geocodeAddress();
-            async function getWeather(lat, lon) {
-                try {
-                    const apiUrl = `https://api.weather.gov/points/${lat},${lon}`;
-                    let response = await fetch(apiUrl);
-                    let data = await response.json();
-                    let forecastUrl = data.properties.forecastHourly;
-                    
-                    response = await fetch(forecastUrl);
-                    data = await response.json();
-                    
-                    const forecastDiv = document.getElementById('forecast');
-                    forecastDiv.innerHTML = data.properties.periods.map(period => `
-                        <h3>${period.name}</h3>
-                        <p>${period.detailedForecast}</p>
-                    `).join('');
-                } catch (error) {
-                    console.error('Error fetching weather data:', error);
-                    document.getElementById('forecast').innerText = 'Failed to fetch weather data.';
-                }
-            }
         </script>
     
 </body>
