@@ -1,1 +1,0 @@
-/api/census/* https://geocoding.geo.census.gov/geocoder/:splat 200

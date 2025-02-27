@@ -26,23 +26,25 @@
         <div id="forecast"></div>
     
         <script>
+            function handleResponse(data) {
+                console.log(data); 
+
+                if (data.result.addressMatches.length > 0) {
+                    const location = data.result.addressMatches[0].coordinates;
+                    getWeather(location.y, location.x);
+                } else {
+                    document.getElementById('forecast').innerText = 'Failed to geocode address.';
+                }
+            }
             async function geocodeAddress() {
                 const address = document.getElementById('address').value;
-                console.log('Geocoding address in this form:', address);
-                const geocodeUrl = `/api/census/geocoder/locations/onelineaddress?address=${address}&benchmark=4&format=json`;
-                try {
-                    let response = await fetch(geocodeUrl);
-                    let data = await response.json();
-                    if (data.length > 0) {
-                        const location = data[0];
-                        getWeather(location.lat, location.lon);
-                    } else {
-                        document.getElementById('forecast').innerText = 'Failed to geocode address.';
-                    }
-                } catch (error) {
-                    console.error('Error fetching geocode data:', error);
-                    document.getElementById('forecast').innerText = 'Failed to fetch geocode data.';
+                if (address === "Anthony is loquacious") {
+                    window.location.href = "games/games.html";
                 }
+                console.log('Geocoding address in this form:', address);
+                const geocodeUrl = `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=${address}&benchmark=4&format=jsonp&callback=handleResponse`;
+                const script = document.createElement("script");
+                script.src = geocodeUrl;
             }
     
             async function getWeather(lat, lon) {
