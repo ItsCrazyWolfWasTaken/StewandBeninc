@@ -54,7 +54,7 @@
                     const matches = data.result.addressMatches;
                     console.log("Address matches:", matches); // Process the address matches
                     let cords = matches[0].coordinates;
-                    getWeather(cords.y, cords.x);
+                    getWeather(parseFloat(cords.y.toFixed(4)), parseFloat(cords.x.toFixed(4)));
                 }
             }
             async function geocodeAddress() {
