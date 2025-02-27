@@ -21,18 +21,16 @@
             <li><a href="weather.html" class="here">Weather</a></li>
             </ul>
           </div>
-        <input type="text" id="address" placeholder="Enter an address" oninput="showSuggestions()" class="top">
+        <input type="text" id="address" placeholder="Enter an address" class="top">
         <div id="suggestions"></div>
         <button onclick="geocodeAddress()">Get Forecast</button>
         <div id="forecast"></div>
     
         <script>
-            let apiKey = "67bf3edf17f5e509048619idn4a1a80";
             async function geocodeAddress() {
                 const address = document.getElementById('address').value;
-                address.replace(/ /g, '+');
                 console.log('Geocoding address in this form:', address);
-                const geocodeUrl = `https://geocode.maps.co/search?q=${address}&api_key=${apiKey}`;
+                const geocodeUrl = `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=${address}&benchmark=4&format=json`;
                 
                 try {
                     let response = await fetch(geocodeUrl);
@@ -52,10 +50,9 @@
             async function getWeather(lat, lon) {
                 try {
                     const apiUrl = `https://api.weather.gov/points/${lat},${lon}`;
-                    
                     let response = await fetch(apiUrl);
                     let data = await response.json();
-                    let forecastUrl = data.properties.forecast;
+                    let forecastUrl = data.properties.forecastHourly;
                     
                     response = await fetch(forecastUrl);
                     data = await response.json();
