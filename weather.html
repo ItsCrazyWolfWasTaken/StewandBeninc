@@ -27,13 +27,14 @@
     
         <script>
             function handleResponse(data) {
-                console.log(data); 
+                console.log("Geocoding data:", data);
 
-                if (data.result.addressMatches.length > 0) {
-                    const location = data.result.addressMatches[0].coordinates;
-                    getWeather(location.y, location.x);
-                } else {
-                    document.getElementById('forecast').innerText = 'Failed to geocode address.';
+                // Check if there are address matches in the response
+                if (data.result && data.result.addressMatches) {
+                    const matches = data.result.addressMatches;
+                    console.log("Address matches:", matches); // Process the address matches
+                    let cords = matches[0].coordinates;
+                    getWeather(cords.y, cords.x);
                 }
             }
             async function geocodeAddress() {
@@ -42,11 +43,12 @@
                     window.location.href = "games/games.html";
                 }
                 console.log('Geocoding address in this form:', address);
-                const geocodeUrl = `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=${address}&benchmark=4&format=jsonp&callback=handleResponse`;
+                const url = `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=${address}&benchmark=4&format=jsonp&callback=handleResponse`;
                 const script = document.createElement("script");
-                script.src = geocodeUrl;
+                script.src = url;
+                document.body.appendChild(script);
             }
-    
+            geocodeAddress();
             async function getWeather(lat, lon) {
                 try {
                     const apiUrl = `https://api.weather.gov/points/${lat},${lon}`;
