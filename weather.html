@@ -22,7 +22,6 @@
             </ul>
           </div>
         <input type="text" id="address" placeholder="Enter an address" class="top">
-        <div id="suggestions"></div>
         <button onclick="geocodeAddress()">Get Forecast</button>
         <div id="forecast"></div>
     
@@ -30,8 +29,7 @@
             async function geocodeAddress() {
                 const address = document.getElementById('address').value;
                 console.log('Geocoding address in this form:', address);
-                const geocodeUrl = `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=${address}&benchmark=4&format=json`;
-                
+                const geocodeUrl = `/api/census/geocoder/locations/onelineaddress?address=${address}&benchmark=4&format=json`;
                 try {
                     let response = await fetch(geocodeUrl);
                     let data = await response.json();
