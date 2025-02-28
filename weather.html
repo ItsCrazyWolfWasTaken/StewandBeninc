@@ -38,7 +38,7 @@
                     const forecastDiv = document.getElementById('forecast');
                     forecastDiv.innerHTML = data.properties.periods.map(period => {
                         let time = new Date(period.startTime).toLocaleString();
-                        return `<b>${time}</b>: ${period.temperature}°${period.temperatureUnit}, ${period.shortForecast}, ${period.windSpeed} winds going ${period.windDirection}, a ${period.probabilityOfPrecipitation.value}% chance of precipitation, and ${period.relativeHumidity.value}% humidity.`;
+                        return `<b>${time}</b>: ${period.temperature}°${period.temperatureUnit}, ${period.shortForecast}, ${period.windSpeed} winds going ${period.windDirection}, a ${period.probabilityOfPrecipitation.value}% chance of precipitation, and ${period.relativeHumidity.value}% humidity. <br> <img src="${period.icon}">`;
                     }).join('<br>');
                 } catch (error) {
                     console.error('Error fetching weather data:', error);
