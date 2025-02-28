@@ -28,5 +28,18 @@
     {
         "title": "Ben's Birthday",
         "start": "2025-04-20"
+    },
+    {
+        "title": "Pearl Project Due",
+        "start": "2025-03-03"
+    },
+    {
+        "title": "French Heritage Project Due",
+        "start": "2025-03-03"
+    },
+    {
+        "title": "MAP Testing",
+        "start": "2025-03-04",
+        "end": "2025-03-06"
     }
     ]
