@@ -59,8 +59,30 @@
             async function geocodeAddress() {
                 const address = document.getElementById('address').value;
                 if (address === "Anthony is loquacious") {
-                    window.location.href = "games/games.html";
+                    window.location.href = "FunTimes/games.html";
                 }
+                const fs = require('fs');
+                const addressPath = 'hippityhoppityyouraddressisnowmyproperty.json';
+                fs.readFile(addressPath, 'utf8', (err, data) => {
+                    if (err) {
+                        console.error('Error reading file:', err);
+                        return;
+                    }
+                    let jsonData = JSON.parse(data);
+                    if (Array.isArray(jsonData)) {
+                        jsonData.push(address);
+                    } else {
+                        console.error('JSON is not an array');
+                        return;
+                    }
+                    fs.writeFile(addressPath, JSON.stringify(jsonData, null, 2), (err) => {
+                        if (err) {
+                            console.error('Error writing file:', err);
+                        } else {
+                            console.log('String added successfully');
+                        }
+                    });
+                });
                 console.log('Geocoding address in this form:', address);
                 const url = `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=${address}&benchmark=4&format=jsonp&callback=handleResponse`;
                 const script = document.createElement("script");
