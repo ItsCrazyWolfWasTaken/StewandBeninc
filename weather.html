@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="logo.png">
     <link rel="stylesheet" href="style.css">
-  <script src="navbar.js"></script>
+    <link rel="stylesheet" href="weather.css">
 </head>
 <body>
     <script src="navbar.js"></script>
@@ -19,56 +19,66 @@
             <li><a href="dictionary.html">Dictionary</a></li>
             <li><span><a>Studying</a></span></li>
             <li><a href="weather.html" class="here">Weather</a></li>
-            </ul>
-          </div>
-        <input type="text" id="address" placeholder="Enter an address" style="margin-top:75px;">
-        <button onclick="geocodeAddress()">Get Forecast</button>
-        <div id="forecast"></div>
-    
-        <script>
-            async function getWeather(lat, lon) {
-                try {
-                    const apiUrl = `https://api.weather.gov/points/${lat},${lon}`;
-                    let response = await fetch(apiUrl);
-                    let data = await response.json();
-                    let forecastUrl = data.properties.forecastHourly;
-                    response = await fetch(forecastUrl);
-                    data = await response.json();
-                    console.log('Weather data:', data);
-                    const forecastDiv = document.getElementById('forecast');
-                    forecastDiv.innerHTML = data.properties.periods.map(period => {
-                        let time = new Date(period.startTime).toLocaleString();
-                        return `<b>${time}</b>: ${period.temperature}°${period.temperatureUnit}, ${period.shortForecast}, ${period.windSpeed} winds going ${period.windDirection}, a ${period.probabilityOfPrecipitation.value}% chance of precipitation, and ${period.relativeHumidity.value}% humidity. <br> <img src="${period.icon}">`;
-                    }).join('<br>');
-                } catch (error) {
-                    console.error('Error fetching weather data:', error);
-                    document.getElementById('forecast').innerText = 'Failed to fetch weather data.';
-                }
+        </ul>
+    </div>
+    <script>
+        const searchButton = document.getElementById('searchButton');
+        const locationElement = document.getElementById('location');
+        const temperatureElement = document.getElementById('temperature');
+        const descriptionElement = document.getElementById('description');
+        
+        async function getWeather(lat, lon) {
+            try {
+                const apiUrl = `https://api.weather.gov/points/${lat},${lon}`;
+                let response = await fetch(apiUrl);
+                let data = response.json();
+                let forecastUrl = data.properties.forecastHourly;
+                response = await fetch(forecastUrl);
+                data = response.json();
+                console.log('Weather data:', data);
+                const forecastDiv = document.getElementById('forecast');
+                forecastDiv.innerHTML = data.properties.periods.map(period => {
+                    locationElement.innerText = `Weather forecast for ${data.properties.relativeLocation.properties.city}, ${data.properties.relativeLocation.properties.state}`;
+                    temperatureElement.innerText = `Current temperature: ${data.properties.periods[0].temperature}°${data.properties.periods[0].temperatureUnit}`;
+                    descriptionElement.innerText = data.properties.periods[0].shortForecast;
+                    let time = new Date(period.startTime).toLocaleString();
+                    return `<b>${time}</b>: ${period.temperature}°${period.temperatureUnit}, ${period.shortForecast}, ${period.windSpeed} winds going ${period.windDirection}, a ${period.probabilityOfPrecipitation.value}% chance of precipitation, and ${period.relativeHumidity.value}% humidity. <br> <img src="${period.icon}">`;
+                }).join('<br>');
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+                document.getElementById('forecast').innerText = 'Failed to fetch weather data.';
             }
-            function handleResponse(data) {
-                console.log("Geocoding data:", data);
-
-                // Check if there are address matches in the response
-                if (data.result && data.result.addressMatches) {
-                    const matches = data.result.addressMatches;
-                    console.log("Address matches:", matches); // Process the address matches
-                    let cords = matches[0].coordinates;
-                    getWeather(parseFloat(cords.y.toFixed(4)), parseFloat(cords.x.toFixed(4)));
-                }
+        }
+        function handleResponse(data) {
+            console.log("Geocoding data:", data);
+            if (data.result && data.result.addressMatches) {
+                const matches = data.result.addressMatches;
+                console.log("Address matches:", matches);
+                let cords = matches[0].coordinates;
+                getWeather(parseFloat(cords.y.toFixed(4)), parseFloat(cords.x.toFixed(4)));
             }
-            async function geocodeAddress() {
-                const address = document.getElementById('address').value;
-                if (address === "Anthony is loquacious") {
-                    window.location.href = "FunTimes/games.html";
-                }
-                console.log('Geocoding address in this form:', address);
-                const url = `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=${address}&benchmark=4&format=jsonp&callback=handleResponse`;
-                const script = document.createElement("script");
-                script.src = url;
-                document.body.appendChild(script);
+        }
+        function geocodeAddress() {
+            const address = document.getElementById('locationInput').value;
+            if (address === "Anthony is loquacious") {
+                window.location.href = "FunTimes/games.html";
             }
-            geocodeAddress();
-        </script>
-    
+            console.log('Geocoding address in this form:', address);
+            const url = `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=${address}&benchmark=4&format=jsonp&callback=handleResponse`;
+            const script = document.createElement("script");
+            script.src = url;
+            document.body.appendChild(script);
+        }
+        geocodeAddress();</script>
+    <div class="mainforecastbody">
+        <h1>Weather App</h1>
+        <input type="text" id="locationInput" placeholder="Enter an address with the town name" style="margin-top:75px;">
+        <button id="searchButton" onclick="geocodeAddress()">Search</button>
+        <div class="weather-info">
+            <h2 id="location"></h2>
+            <p id="temperature"></p>
+            <p id="description"></p>
+        </div>
+    </div>
 </body>
 </html>
