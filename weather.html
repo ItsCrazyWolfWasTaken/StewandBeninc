@@ -21,7 +21,7 @@
     
         async function getWeather(lat, lon) {
             try {
-                const daylist = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                const daylist = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
                 const apiUrl = `https://api.weather.gov/points/${lat},${lon}`;
                 let response = await fetch(apiUrl);
                 let data = await response.json();
@@ -30,8 +30,8 @@
                 response = await fetch(forecastUrl);
                 data = await response.json();
                 document.getElementById('data').innerHTML = data.properties.periods.map(period => {
+                    let date = new Date(period.startTime).getDay();
                     let time = new Date(period.startTime).toLocaleTimeString();
-                    let date = new Date(period.startTime).getUTCDay();
                     let day = daylist[date];
                     document.getElementById('forecasttable').style.display = "block";
                     return `<tr>
