@@ -14,71 +14,86 @@
 </head>
 <body>
     <script src="navbar.js"></script>
-    <div class="overlay-menu">
-        <ul id="menu">
-            <li><a href="dictionary.html">Dictionary</a></li>
-            <li><span><a>Studying</a></span></li>
-            <li><a href="weather.html" class="here">Weather</a></li>
-        </ul>
-    </div>
     <script>
-        const searchButton = document.getElementById('searchButton');
-        const locationElement = document.getElementById('location');
-        const temperatureElement = document.getElementById('temperature');
-        const descriptionElement = document.getElementById('description');
-        
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('searchButton').addEventListener("click", geocodeAddress);
+        });
+    
         async function getWeather(lat, lon) {
             try {
                 const apiUrl = `https://api.weather.gov/points/${lat},${lon}`;
                 let response = await fetch(apiUrl);
-                let data = response.json();
+                let data = await response.json();
+                console.log('Weather data:', data);
                 let forecastUrl = data.properties.forecastHourly;
                 response = await fetch(forecastUrl);
-                data = response.json();
-                console.log('Weather data:', data);
-                const forecastDiv = document.getElementById('forecast');
-                forecastDiv.innerHTML = data.properties.periods.map(period => {
-                    locationElement.innerText = `Weather forecast for ${data.properties.relativeLocation.properties.city}, ${data.properties.relativeLocation.properties.state}`;
-                    temperatureElement.innerText = `Current temperature: ${data.properties.periods[0].temperature}°${data.properties.periods[0].temperatureUnit}`;
-                    descriptionElement.innerText = data.properties.periods[0].shortForecast;
+                data = await response.json();
+                document.getElementById('data').innerHTML = data.properties.periods.map(period => {
                     let time = new Date(period.startTime).toLocaleString();
-                    return `<b>${time}</b>: ${period.temperature}°${period.temperatureUnit}, ${period.shortForecast}, ${period.windSpeed} winds going ${period.windDirection}, a ${period.probabilityOfPrecipitation.value}% chance of precipitation, and ${period.relativeHumidity.value}% humidity. <br> <img src="${period.icon}">`;
-                }).join('<br>');
+                    document.getElementById('forecasttable').style.display = "block";
+                    return `<tr>
+                        <td id="time">${time}.</td>
+                        <td id="temperature">${period.temperature}°${period.temperatureUnit}</td>
+                        <td id="description">${period.shortForecast}</td>
+                        <td id="wind">${period.windSpeed} winds going ${period.windDirection}</td>
+                        <td id="precipitation">${period.probabilityOfPrecipitation.value}%</td>
+                        <td id="humidity">${period.relativeHumidity.value}%</td>
+                    </tr>`}).join('<br>');
             } catch (error) {
                 console.error('Error fetching weather data:', error);
-                document.getElementById('forecast').innerText = 'Failed to fetch weather data.';
             }
         }
+    
         function handleResponse(data) {
             console.log("Geocoding data:", data);
-            if (data.result && data.result.addressMatches) {
+            if (data.result && data.result.addressMatches.length > 0) {
                 const matches = data.result.addressMatches;
                 console.log("Address matches:", matches);
                 let cords = matches[0].coordinates;
                 getWeather(parseFloat(cords.y.toFixed(4)), parseFloat(cords.x.toFixed(4)));
+            } else {
+                console.error("No address matches found.");
             }
         }
+    
         function geocodeAddress() {
-            const address = document.getElementById('locationInput').value;
+            const address = document.getElementById('locationInput').value.trim();
+            if (!address) {
+                console.error("No address entered.");
+                return;
+            }
+    
             if (address === "Anthony is loquacious") {
                 window.location.href = "FunTimes/games.html";
+                return;
             }
-            console.log('Geocoding address in this form:', address);
-            const url = `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=${address}&benchmark=4&format=jsonp&callback=handleResponse`;
+    
+            console.log('Geocoding address:', address);
+            const url = `https://geocoding.geo.census.gov/geocoder/locations/onelineaddress?address=${encodeURIComponent(address)}&benchmark=4&format=jsonp&callback=handleResponse`;
             const script = document.createElement("script");
             script.src = url;
             document.body.appendChild(script);
         }
-        geocodeAddress();</script>
-    <div class="mainforecastbody">
-        <h1>Weather App</h1>
-        <input type="text" id="locationInput" placeholder="Enter an address with the town name" style="margin-top:75px;">
-        <button id="searchButton" onclick="geocodeAddress()">Search</button>
-        <div class="weather-info">
-            <h2 id="location"></h2>
-            <p id="temperature"></p>
-            <p id="description"></p>
-        </div>
+    </script>
+    
+    <div class="mainforecastbody" style="margin-top: 75px;">
+        <h1 id="place">Weather Forecast From NOAA</h1>
+        <input type="text" id="locationInput" placeholder="Enter an address with the town name">
+        <button id="searchButton">Search</button>
+        <table id="forecasttable" class="mainforecastbody">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Temperature</th>
+                    <th>Description</th>
+                    <th>Wind</th>
+                    <th>Precipitation</th>
+                    <th>Humidity</th>
+                </tr>
+            </thead>
+            <tbody id="data">
+            </tbody>
+        </table>
     </div>
 </body>
 </html>
