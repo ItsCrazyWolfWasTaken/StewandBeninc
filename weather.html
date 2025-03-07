@@ -29,10 +29,11 @@
                 response = await fetch(forecastUrl);
                 data = await response.json();
                 document.getElementById('data').innerHTML = data.properties.periods.map(period => {
-                    let time = new Date(period.startTime).toLocaleString();
+                    let time = new Date(period.startTime).toLocaleTimeString();
+                    let day = new Date(period.startTime).getUTCDay();
                     document.getElementById('forecasttable').style.display = "block";
                     return `<tr>
-                        <td id="time">${time}.</td>
+                        <td id="time">${day}, ${time}.</td>
                         <td id="temperature">${period.temperature}°${period.temperatureUnit}</td>
                         <td id="description">${period.shortForecast}</td>
                         <td id="wind">${period.windSpeed} winds going ${period.windDirection}</td>
