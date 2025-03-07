@@ -3,10 +3,10 @@
     margin: 0 auto;
     text-align: center;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     margin-top: 25px;
+    background-color: #696969;
 }
 
 h1 {
