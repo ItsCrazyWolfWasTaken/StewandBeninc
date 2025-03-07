@@ -36,8 +36,13 @@ button {
 table{
     display:none;
     border-spacing: 10px;
+    border-collapse: separate;
 }
 
 td {
     padding: 10px;
+}
+
+tr {
+    text-align: center;
 }
